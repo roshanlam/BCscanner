@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http:
+  http_parser:
   flutter_barcode_scanner:
   cupertino_icons: ^1.0.0
 

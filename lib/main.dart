@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:http/http.dart' as http;
 
+import 'api.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
@@ -47,6 +50,7 @@ class HomePageState extends State<HomePage>{
       body: Center(
         child: Text(
           // message,
+         // _barcode,
           _barcode,
           style: new TextStyle(fontSize: 30),
           textAlign: TextAlign.center,
