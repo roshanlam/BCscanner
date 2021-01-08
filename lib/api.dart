@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import './main.dart';
+import 'mainmain.dart';
 
 void main() async {
   String url = "https://barcode.monster/api/";

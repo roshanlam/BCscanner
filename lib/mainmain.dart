@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
+// import 'api.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -18,10 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  String _url = "https://barcode.monster/api/";
   String message = "Scan Gar ra ja, mero aro cam cha ";
   String _barcode = " ";
-
   @override
   void initState() {
     super.initState();
@@ -37,15 +36,12 @@ class HomePageState extends State<HomePage> {
     } on PlatformException {
       _barcodeScan = 'Failed To Get Platform Version';
     }
-    String url = _url + _barcodeScan;
-    final response = await http.get(url);
-    GetData getData = GetData.fromJson(jsonDecode(response.body));
-    var desc = getData.description;
-
     if (!mounted) return;
     setState(() {
-      _barcode = desc;
+      _barcode = _barcodeScan;
     });
+    getinfo();
+    // return barcodeScan;
   }
 
   void getinfo() async {
@@ -60,14 +56,14 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("ScanGar"),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("ScanGar"),
       ),
       body: Center(
         child: Text(
-          '$message ' + '\n\n$_barcode',
-          style: new TextStyle(fontSize: 20),
+          _barcode,
+          style: new TextStyle(fontSize: 30),
           textAlign: TextAlign.center,
         ),
       ),
