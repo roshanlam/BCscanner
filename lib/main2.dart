@@ -1,57 +1,35 @@
-import 'package:flutter/material.dart';
-import 'api.dart';
 import 'dart:convert';
+import 'package:http/http.dart';
+import 'main.dart';
 
-void main() => runApp(MyApp());
+class ApiGet {
+  final String _url = 'https://barcode.monster/api/';
+  Future<List<JsonData>> flutterRespositoriesUsingAsyncAwait() async {
+    Response response = await get(_url);
+    List<dynamic> parsed = json.decode(response.body);
+    return parsed.map((json) => JsonData.fromJson(json)).toList();
+  }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+  Future<List<JsonData>> flutterRespositoriesUsingFuture() {
+    return get(_url).then((response) => json.decode(response.body)).then(
+        (parsed) => parsed.map((json) => JsonData.fromJson(json)).toList());
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  String url;
-  var Data;
-  String QueryText = 'Query';
+class JsonData {
+  final String desc;
+  JsonData({
+    this.desc,
+  });
+
+  factory JsonData.fromJson(Map<String, dynamic> json) {
+    return JsonData(
+      desc: json['desciption'] as String,
+    );
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('PYTHON AND FLUTTER'),
-        ),
-        body: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                onChanged: (value) {
-                  url = 'url/?Query=' + value.toString();
-                },
-                decoration: InputDecoration(
-                    hintText: 'Search Anything Here',
-                    suffixIcon: GestureDetector(
-                        onTap: () async {
-                          Data = await Getdata(url);
-                          var DecodedData = jsonDecode(Data);
-                          setState(() {
-                            QueryText = DecodedData['Query'];
-                          });
-                        },
-                        child: Icon(Icons.search))),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(
-                QueryText,
-                style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  String toString() {
+    return 'The Product is $desc';
   }
 }
