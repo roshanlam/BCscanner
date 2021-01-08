@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
-import 'api.dart';
+// import 'api.dart';
 
 void main() => runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -19,14 +19,12 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final String _url = "https://barcode.monster/api/";
   String message = "Scan Gar ra ja, mero aro cam cha ";
   String _barcode = " ";
-  var result = new GetData();
   @override
   void initState() {
     super.initState();
-    // this.getJsonData();
+    getinfo();
   }
 
   Future<void> barcodeScan() async {
@@ -42,27 +40,19 @@ class HomePageState extends State<HomePage> {
     setState(() {
       _barcode = _barcodeScan;
     });
-    return barcodeScan;
+    getinfo();
+    // return barcodeScan;
   }
 
   void getinfo() async {
+    String _url = "https://barcode.monster/api/";
     String url = _url + _barcode;
     final response = await http.get(url);
     print(response.body);
-    result = GetData(description: response.body);
-    print(result);
+    GetData getData = GetData.fromJson(jsonDecode(response.body));
+    print(getData.description);
   }
 
-/*
-  @override
-  void getBarCode() async {
-    super.initState();
-    await barcodeScan();
-    setState(() {
-      _barcode = barcodeScan.toString();
-    });
-  }
-*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,5 +73,21 @@ class HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+class GetData {
+  String description;
+
+  GetData({this.description});
+
+  GetData.fromJson(Map<String, dynamic> json) {
+    description = json['description'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['description'] = this.description;
+    return data;
   }
 }
